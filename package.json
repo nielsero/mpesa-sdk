@@ -1,0 +1,26 @@
+{
+  "name": "mpesa-sdk",
+  "version": "0.0.1",
+  "description": "Type safe SDK for M-Pesa API (Mozambique)",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "keywords": [
+    "mpesa",
+    "sdk",
+    "mozambique"
+  ],
+  "author": "nielsero",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nielsero/mpesa-sdk"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.3"
+  }
+}
