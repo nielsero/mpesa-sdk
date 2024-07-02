@@ -22,3 +22,10 @@ export function getBearerToken(
     return null;
   }
 }
+
+export function getUrl(mode: string): string {
+  const urlSandbox = "https://api.sandbox.vm.co.mz";
+  const urlProduction = "https://api.vm.co.mz";
+
+  return mode === "production" ? `${urlProduction}` : `${urlSandbox}`;
+}

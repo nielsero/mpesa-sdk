@@ -14,10 +14,26 @@ export type C2BRequest = {
   input_ServiceProviderCode: string;
 };
 
-export type C2BResponse = {
+export type C2BResponse =
+  | {
+      output_ConversationID: string;
+      output_TransactionID: string;
+      output_ResponseDesc: string;
+      output_ResponseCode: string;
+      output_ThirdPartyReference: string;
+    }
+  | { output_error: string };
+
+export type QueryTransactionStatusRequest = {
+  input_ThirdPartyReference: string;
+  input_QueryReference: string;
+  input_ServiceProviderCode: string;
+};
+
+export type QueryTransactionStatusResponse = {
   output_ConversationID: string;
-  output_TransactionID: string;
   output_ResponseDesc: string;
   output_ResponseCode: string;
   output_ThirdPartyReference: string;
+  output_ResponseTransactionStatus: string;
 };
