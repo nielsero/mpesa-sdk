@@ -10,3 +10,15 @@ const configuration: Configuration = {
   origin: null,
   serviceProviderCode: null,
 };
+
+export function checkConfiguration(): Configuration {
+  return Object.assign({}, configuration);
+}
+
+export function testing() {
+  console.log("Testing");
+  const newConfig = checkConfiguration();
+  newConfig.mode = "production";
+  console.log("config", configuration);
+  console.log("newConfig", newConfig);
+}
