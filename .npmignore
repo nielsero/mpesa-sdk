@@ -7,10 +7,6 @@ src
 tsconfig.json
 tsup.config.ts
 
-# Compiled output
-*.js
-*.js.map
-
 # Dependency directories
 node_modules
 
