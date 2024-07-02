@@ -15,10 +15,25 @@ export function checkConfiguration(): Configuration {
   return Object.assign({}, configuration);
 }
 
-export function testing() {
-  console.log("Testing");
-  const newConfig = checkConfiguration();
-  newConfig.mode = "production";
-  console.log("config", configuration);
-  console.log("newConfig", newConfig);
+export function configure(config: {
+  mode?: "sandbox" | "production";
+  apiKey?: string;
+  publicKey?: string;
+  origin?: string;
+  serviceProviderCode?: number;
+}) {
+  configuration.mode = config.mode || configuration.mode;
+  configuration.apiKey = config.apiKey || configuration.apiKey;
+  configuration.publicKey = config.publicKey || configuration.publicKey;
+  configuration.origin = config.origin || configuration.origin;
+  configuration.serviceProviderCode =
+    config.serviceProviderCode || configuration.serviceProviderCode;
 }
+
+function testing() {
+  console.log("testing");
+  configure({ mode: "production", apiKey: "1234" });
+  console.log("config", checkConfiguration());
+}
+
+testing();
