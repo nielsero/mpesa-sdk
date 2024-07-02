@@ -1,4 +1,6 @@
-import { Configuration } from "./types";
+import axios from "axios";
+import { C2BRequest, C2BResponse, Configuration } from "./types";
+import { getBearerToken } from "./utils";
 
 const urlSandbox = "https://api.sandbox.vm.co.mz";
 const urlProduction = "https://api.vm.co.mz";
@@ -11,7 +13,7 @@ const configuration: Configuration = {
   serviceProviderCode: null,
 };
 
-export function checkConfiguration(): Configuration {
+export function getConfiguration(): Configuration {
   return Object.assign({}, configuration);
 }
 
@@ -20,7 +22,7 @@ export function configure(config: {
   apiKey?: string;
   publicKey?: string;
   origin?: string;
-  serviceProviderCode?: number;
+  serviceProviderCode?: string;
 }) {
   configuration.mode = config.mode || configuration.mode;
   configuration.apiKey = config.apiKey || configuration.apiKey;
@@ -30,10 +32,57 @@ export function configure(config: {
     config.serviceProviderCode || configuration.serviceProviderCode;
 }
 
-function testing() {
-  console.log("testing");
-  configure({ mode: "production", apiKey: "1234" });
-  console.log("config", checkConfiguration());
-}
+export async function c2b(request: {
+  amount: number;
+  msisdn: string;
+  transactionReference: string;
+  thirdPartyReference: string;
+}) {
+  if (
+    !configuration.mode ||
+    !configuration.apiKey ||
+    !configuration.publicKey ||
+    !configuration.origin ||
+    !configuration.serviceProviderCode
+  ) {
+    throw new Error("Configuration error");
+  }
 
-testing();
+  const url =
+    configuration.mode === "production"
+      ? `${urlProduction}:18352/ipg/v1x/c2bPayment/singleStage/`
+      : `${urlSandbox}:18352/ipg/v1x/c2bPayment/singleStage/`;
+
+  const token = await getBearerToken(
+    configuration.apiKey,
+    configuration.publicKey
+  );
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    Origin: configuration.origin,
+  };
+
+  const body: C2BRequest = {
+    input_TransactionReference: request.transactionReference,
+    input_CustomerMSISDN: request.msisdn,
+    input_Amount: request.amount + "",
+    input_ThirdPartyReference: request.thirdPartyReference,
+    input_ServiceProviderCode: configuration.serviceProviderCode,
+  };
+
+  try {
+    const { data } = await axios.request<C2BResponse>({
+      method: "POST",
+      url,
+      headers,
+      data: body,
+      timeout: 120000,
+    });
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
