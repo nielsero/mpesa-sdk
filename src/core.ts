@@ -1,10 +1,13 @@
 import axios from "axios";
 import {
+  B2BRequest,
+  B2BResponse,
   B2CRequest,
   B2CResponse,
   C2BRequest,
   C2BResponse,
   Configuration,
+  ErrorResponse,
   QueryTransactionStatusResponse,
   ReversalRequest,
   ReversalResponse,
@@ -88,8 +91,8 @@ export async function c2bPayment(request: {
 
     return data;
   } catch (error: any) {
-    if (error.response.data) {
-      return error.response.data as C2BResponse;
+    if (error.response?.data) {
+      return error.response.data as C2BResponse | ErrorResponse;
     }
 
     throw new Error("API error");
@@ -141,8 +144,10 @@ export async function queryTransactionStatus(request: {
 
     return data;
   } catch (error: any) {
-    if (error.response.data) {
-      return error.response.data as QueryTransactionStatusResponse;
+    if (error.response?.data) {
+      return error.response.data as
+        | QueryTransactionStatusResponse
+        | ErrorResponse;
     }
 
     throw new Error("API error");
@@ -197,8 +202,8 @@ export async function b2cPayment(request: {
 
     return data;
   } catch (error: any) {
-    if (error.response.data) {
-      return error.response.data as B2CResponse;
+    if (error.response?.data) {
+      return error.response.data as B2CResponse | ErrorResponse;
     }
 
     throw new Error("API error");
@@ -256,8 +261,63 @@ export async function reversal(request: {
 
     return data;
   } catch (error: any) {
-    if (error.response.data) {
-      return error.response.data as ReversalResponse;
+    if (error.response?.data) {
+      return error.response.data as ReversalResponse | ErrorResponse;
+    }
+
+    throw new Error("API error");
+  }
+}
+
+export async function b2bPayment(request: {
+  amount: number;
+  transactionReference: string;
+  thirdPartyReference: string;
+  receiverPartyCode: string;
+}) {
+  if (
+    !configuration.mode ||
+    !configuration.apiKey ||
+    !configuration.publicKey ||
+    !configuration.origin ||
+    !configuration.serviceProviderCode
+  ) {
+    throw new Error("Configuration error");
+  }
+
+  const url = `${getUrl(configuration.mode)}:18349/ipg/v1x/b2bPayment/`;
+
+  const token = await getBearerToken(
+    configuration.apiKey,
+    configuration.publicKey
+  );
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    Origin: configuration.origin,
+  };
+
+  const body: B2BRequest = {
+    input_TransactionReference: request.transactionReference,
+    input_Amount: request.amount + "",
+    input_ThirdPartyReference: request.thirdPartyReference,
+    input_PrimaryPartyCode: configuration.serviceProviderCode,
+    input_ReceiverPartyCode: request.receiverPartyCode,
+  };
+
+  try {
+    const { data } = await axios.request<B2BResponse>({
+      method: "POST",
+      url,
+      headers,
+      data: body,
+    });
+
+    return data;
+  } catch (error: any) {
+    if (error.response?.data) {
+      return error.response.data as B2BResponse | ErrorResponse;
     }
 
     throw new Error("API error");

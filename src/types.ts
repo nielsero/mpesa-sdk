@@ -6,6 +6,10 @@ export type Configuration = {
   serviceProviderCode: string | null;
 };
 
+export type ErrorResponse = {
+  output_error: string;
+};
+
 export type C2BRequest = {
   input_TransactionReference: string;
   input_CustomerMSISDN: string;
@@ -14,15 +18,13 @@ export type C2BRequest = {
   input_ServiceProviderCode: string;
 };
 
-export type C2BResponse =
-  | {
-      output_ConversationID: string;
-      output_TransactionID: string;
-      output_ResponseDesc: string;
-      output_ResponseCode: string;
-      output_ThirdPartyReference: string;
-    }
-  | { output_error: string };
+export type C2BResponse = {
+  output_ConversationID: string;
+  output_TransactionID: string;
+  output_ResponseDesc: string;
+  output_ResponseCode: string;
+  output_ThirdPartyReference: string;
+};
 
 export type QueryTransactionStatusRequest = {
   input_ThirdPartyReference: string;
@@ -30,15 +32,13 @@ export type QueryTransactionStatusRequest = {
   input_ServiceProviderCode: string;
 };
 
-export type QueryTransactionStatusResponse =
-  | {
-      output_ConversationID: string;
-      output_ResponseDesc: string;
-      output_ResponseCode: string;
-      output_ThirdPartyReference: string;
-      output_ResponseTransactionStatus: string;
-    }
-  | { output_error: string };
+export type QueryTransactionStatusResponse = {
+  output_ConversationID: string;
+  output_ResponseDesc: string;
+  output_ResponseCode: string;
+  output_ThirdPartyReference: string;
+  output_ResponseTransactionStatus: string;
+};
 
 export type B2CRequest = {
   input_TransactionReference: string;
@@ -48,15 +48,13 @@ export type B2CRequest = {
   input_ServiceProviderCode: string;
 };
 
-export type B2CResponse =
-  | {
-      output_ConversationID: string;
-      output_TransactionID: string;
-      output_ResponseDesc: string;
-      output_ResponseCode: string;
-      output_ThirdPartyReference: string;
-    }
-  | { output_error: string };
+export type B2CResponse = {
+  output_ConversationID: string;
+  output_TransactionID: string;
+  output_ResponseDesc: string;
+  output_ResponseCode: string;
+  output_ThirdPartyReference: string;
+};
 
 export type ReversalRequest = {
   input_TransactionID: string;
@@ -67,12 +65,26 @@ export type ReversalRequest = {
   input_ReversalAmount?: string;
 };
 
-export type ReversalResponse =
-  | {
-      output_ConversationID: string;
-      output_TransactionID: string;
-      output_ResponseDesc: string;
-      output_ResponseCode: string;
-      output_ThirdPartyReference: string;
-    }
-  | { output_error: string };
+export type ReversalResponse = {
+  output_ConversationID: string;
+  output_TransactionID: string;
+  output_ResponseDesc: string;
+  output_ResponseCode: string;
+  output_ThirdPartyReference: string;
+};
+
+export type B2BRequest = {
+  input_TransactionReference: string;
+  input_Amount: string;
+  input_ThirdPartyReference: string;
+  input_PrimaryPartyCode: string;
+  input_ReceiverPartyCode: string;
+};
+
+export type B2BResponse = {
+  output_ConversationID: string;
+  output_TransactionID: string;
+  output_ResponseDesc: string;
+  output_ResponseCode: string;
+  output_ThirdPartyReference: string;
+};
