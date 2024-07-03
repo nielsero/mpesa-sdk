@@ -18,7 +18,6 @@ export function getBearerToken(
     );
     return encryptedApiKeyBuffer.toString("base64");
   } catch (error) {
-    console.error(error);
     return null;
   }
 }

@@ -1,5 +1,7 @@
 import axios from "axios";
 import {
+  B2CRequest,
+  B2CResponse,
   C2BRequest,
   C2BResponse,
   Configuration,
@@ -130,6 +132,59 @@ export async function queryTransactionStatus(request: {
       url,
       headers,
       params: body,
+      validateStatus: (status) => status >= 200 && status < 500,
+    });
+
+    return data;
+  } catch (error) {
+    throw new Error("API error");
+  }
+}
+
+export async function b2cPayment(request: {
+  amount: number;
+  msisdn: string;
+  transactionReference: string;
+  thirdPartyReference: string;
+}) {
+  if (
+    !configuration.mode ||
+    !configuration.apiKey ||
+    !configuration.publicKey ||
+    !configuration.origin ||
+    !configuration.serviceProviderCode
+  ) {
+    throw new Error("Configuration error");
+  }
+
+  const url = `${getUrl(configuration.mode)}:18345/ipg/v1x/b2cPayment/`;
+
+  const token = await getBearerToken(
+    configuration.apiKey,
+    configuration.publicKey
+  );
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    Origin: configuration.origin,
+  };
+
+  const body: B2CRequest = {
+    input_TransactionReference: request.transactionReference,
+    input_CustomerMSISDN: request.msisdn,
+    input_Amount: request.amount + "",
+    input_ThirdPartyReference: request.thirdPartyReference,
+    input_ServiceProviderCode: configuration.serviceProviderCode,
+  };
+
+  try {
+    const { data } = await axios.request<B2CResponse>({
+      method: "POST",
+      url,
+      headers,
+      data: body,
+      timeout: 120000,
       validateStatus: (status) => status >= 200 && status < 500,
     });
 

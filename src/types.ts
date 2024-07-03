@@ -37,3 +37,21 @@ export type QueryTransactionStatusResponse = {
   output_ThirdPartyReference: string;
   output_ResponseTransactionStatus: string;
 };
+
+export type B2CRequest = {
+  input_TransactionReference: string;
+  input_CustomerMSISDN: string;
+  input_Amount: string;
+  input_ThirdPartyReference: string;
+  input_ServiceProviderCode: string;
+};
+
+export type B2CResponse =
+  | {
+      output_ConversationID: string;
+      output_TransactionID: string;
+      output_ResponseDesc: string;
+      output_ResponseCode: string;
+      output_ThirdPartyReference: string;
+    }
+  | { output_error: string };
