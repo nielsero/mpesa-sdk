@@ -6,6 +6,8 @@ import {
   C2BResponse,
   Configuration,
   QueryTransactionStatusResponse,
+  ReversalRequest,
+  ReversalResponse,
 } from "./types";
 import { getBearerToken, getUrl } from "./utils";
 
@@ -87,7 +89,7 @@ export async function c2bPayment(request: {
     return data;
   } catch (error: any) {
     if (error.response.data) {
-      return error.response.data;
+      return error.response.data as C2BResponse;
     }
 
     throw new Error("API error");
@@ -140,7 +142,7 @@ export async function queryTransactionStatus(request: {
     return data;
   } catch (error: any) {
     if (error.response.data) {
-      return error.response.data;
+      return error.response.data as QueryTransactionStatusResponse;
     }
 
     throw new Error("API error");
@@ -196,7 +198,66 @@ export async function b2cPayment(request: {
     return data;
   } catch (error: any) {
     if (error.response.data) {
-      return error.response.data;
+      return error.response.data as B2CResponse;
+    }
+
+    throw new Error("API error");
+  }
+}
+
+export async function reversal(request: {
+  transactionId: string;
+  securityCredential: string;
+  initiatorIdentifier: string;
+  thirdPartyReference: string;
+  reversalAmount?: number;
+}) {
+  if (
+    !configuration.mode ||
+    !configuration.apiKey ||
+    !configuration.publicKey ||
+    !configuration.origin ||
+    !configuration.serviceProviderCode
+  ) {
+    throw new Error("Configuration error");
+  }
+
+  const url = `${getUrl(configuration.mode)}:18354/ipg/v1x/reversal/`;
+
+  const token = await getBearerToken(
+    configuration.apiKey,
+    configuration.publicKey
+  );
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    Origin: configuration.origin,
+  };
+
+  const body: ReversalRequest = {
+    input_TransactionID: request.transactionId,
+    input_SecurityCredential: request.securityCredential,
+    input_InitiatorIdentifier: request.initiatorIdentifier,
+    input_ThirdPartyReference: request.thirdPartyReference,
+    input_ServiceProviderCode: configuration.serviceProviderCode,
+    input_ReversalAmount: request.reversalAmount
+      ? request.reversalAmount + ""
+      : undefined,
+  };
+
+  try {
+    const { data } = await axios.request<ReversalResponse>({
+      method: "PUT",
+      url,
+      headers,
+      data: body,
+    });
+
+    return data;
+  } catch (error: any) {
+    if (error.response.data) {
+      return error.response.data as ReversalResponse;
     }
 
     throw new Error("API error");
