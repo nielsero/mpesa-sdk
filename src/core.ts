@@ -82,11 +82,14 @@ export async function c2bPayment(request: {
       headers,
       data: body,
       timeout: 120000,
-      validateStatus: (status) => status >= 200 && status < 500,
     });
 
     return data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response.data) {
+      return error.response.data;
+    }
+
     throw new Error("API error");
   }
 }
@@ -132,11 +135,14 @@ export async function queryTransactionStatus(request: {
       url,
       headers,
       params: body,
-      validateStatus: (status) => status >= 200 && status < 500,
     });
 
     return data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response.data) {
+      return error.response.data;
+    }
+
     throw new Error("API error");
   }
 }
@@ -185,11 +191,14 @@ export async function b2cPayment(request: {
       headers,
       data: body,
       timeout: 120000,
-      validateStatus: (status) => status >= 200 && status < 500,
     });
 
     return data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response.data) {
+      return error.response.data;
+    }
+
     throw new Error("API error");
   }
 }
