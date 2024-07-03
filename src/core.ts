@@ -8,6 +8,8 @@ import {
   C2BResponse,
   Configuration,
   ErrorResponse,
+  QueryCustomerNameRequest,
+  QueryCustomerNameResponse,
   QueryTransactionStatusResponse,
   ReversalRequest,
   ReversalResponse,
@@ -318,6 +320,57 @@ export async function b2bPayment(request: {
   } catch (error: any) {
     if (error.response?.data) {
       return error.response.data as B2BResponse | ErrorResponse;
+    }
+
+    throw new Error("API error");
+  }
+}
+
+export async function queryCustomerName(request: {
+  msisdn: string;
+  thirdPartyReference: string;
+}) {
+  if (
+    !configuration.mode ||
+    !configuration.apiKey ||
+    !configuration.publicKey ||
+    !configuration.origin ||
+    !configuration.serviceProviderCode
+  ) {
+    throw new Error("Configuration error");
+  }
+
+  const url = `${getUrl(configuration.mode)}:19323/ipg/v1x/queryCustomerName/`;
+
+  const token = await getBearerToken(
+    configuration.apiKey,
+    configuration.publicKey
+  );
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    Origin: configuration.origin,
+  };
+
+  const body: QueryCustomerNameRequest = {
+    input_CustomerMSISDN: request.msisdn,
+    input_ThirdPartyReference: request.thirdPartyReference,
+    input_ServiceProviderCode: configuration.serviceProviderCode,
+  };
+
+  try {
+    const { data } = await axios.request<QueryCustomerNameResponse>({
+      method: "GET",
+      url,
+      headers,
+      params: body,
+    });
+
+    return data;
+  } catch (error: any) {
+    if (error.response?.data) {
+      return error.response.data as QueryCustomerNameResponse | ErrorResponse;
     }
 
     throw new Error("API error");

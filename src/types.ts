@@ -88,3 +88,17 @@ export type B2BResponse = {
   output_ResponseCode: string;
   output_ThirdPartyReference: string;
 };
+
+export type QueryCustomerNameRequest = {
+  input_CustomerMSISDN: string;
+  input_ThirdPartyReference: string;
+  input_ServiceProviderCode: string;
+};
+
+export type QueryCustomerNameResponse = {
+  output_ConversationID: string;
+  output_ResultDesc: string;
+  output_ResultCode: string;
+  output_ThirdPartyReference: string;
+  output_CustomerName: string;
+};
