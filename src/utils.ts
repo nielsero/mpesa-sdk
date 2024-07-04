@@ -22,7 +22,7 @@ export function getBearerToken(
   }
 }
 
-export function getUrl(mode: string): string {
+export function getApiBaseUrl(mode: string): string {
   const urlSandbox = "https://api.sandbox.vm.co.mz";
   const urlProduction = "https://api.vm.co.mz";
 

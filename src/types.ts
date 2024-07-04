@@ -1,9 +1,9 @@
 export type Configuration = {
   mode: "sandbox" | "production";
-  apiKey: string | null;
-  publicKey: string | null;
-  origin: string | null;
-  serviceProviderCode: string | null;
+  apiKey: string;
+  publicKey: string;
+  origin: string;
+  serviceProviderCode: string;
 };
 
 export type ErrorResponse = {
