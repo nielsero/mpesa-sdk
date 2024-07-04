@@ -1,3 +1,3 @@
-import MPesa from "./core";
-export default MPesa;
+import { MPesa } from "./core";
+export { MPesa as default };
 export * from "./types";

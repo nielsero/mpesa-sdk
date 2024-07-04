@@ -16,7 +16,7 @@ import {
 } from "./types";
 import { getBearerToken, getApiBaseUrl } from "./utils";
 
-export default class MPesa {
+export class MPesa {
   private configuration: Configuration;
 
   constructor(config: {
