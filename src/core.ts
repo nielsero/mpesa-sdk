@@ -35,6 +35,10 @@ export class MPesa {
     };
   }
 
+  getConfiguration() {
+    return Object.assign({}, this.configuration);
+  }
+
   updateConfiguration(config: {
     mode?: "sandbox" | "production";
     apiKey?: string;
