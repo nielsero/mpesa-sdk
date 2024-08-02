@@ -7,12 +7,12 @@ Type safe SDK for [M-Pesa API (Mozambique)](https://developer.mpesa.vm.co.mz/)
 
 ## Features
 
-- [x] C2B Payment
-- [x] B2C Payment
-- [x] B2B Payment
-- [x] Query Transaction Status
-- [x] Query Customer Name
-- [x] Reversal
+- C2B Payment
+- B2C Payment
+- B2B Payment
+- Query Transaction Status
+- Query Customer Name
+- Reversal
 
 ## Installation
 
