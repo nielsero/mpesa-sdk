@@ -8,7 +8,9 @@
   "scripts": {
     "test": "jest",
     "build": "npm test && tsup",
-    "release": "npm run build && npm publish"
+    "release:patch": "npm run build && npm version patch && npm publish",
+    "release:minor": "npm run build && npm version minor && npm publish",
+    "release:major": "npm run build && npm version major && npm publish"
   },
   "keywords": [
     "mpesa",
