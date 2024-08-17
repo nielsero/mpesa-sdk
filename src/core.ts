@@ -97,9 +97,13 @@ export class MPesa {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status && error.response.status < 500) {
+          return error.response.data as C2BResponse;
+        }
+
         const message = error.message;
-        const statusCode = error.response?.status ?? 400;
-        const data = error.response?.data as C2BResponse | ErrorResponse;
+        const statusCode = error.response?.status ?? 500;
+        const data = error.response?.data as ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
 
@@ -147,8 +151,12 @@ export class MPesa {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status && error.response.status < 500) {
+          return error.response.data as B2CResponse;
+        }
+
         const message = error.message;
-        const statusCode = error.response?.status ?? 400;
+        const statusCode = error.response?.status ?? 500;
         const data = error.response?.data as ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
@@ -197,8 +205,12 @@ export class MPesa {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status && error.response.status < 500) {
+          return error.response.data as B2BResponse;
+        }
+
         const message = error.message;
-        const statusCode = error.response?.status ?? 400;
+        const statusCode = error.response?.status ?? 500;
         const data = error.response?.data as ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
@@ -243,8 +255,12 @@ export class MPesa {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status && error.response.status < 500) {
+          return error.response.data as QueryTransactionStatusResponse;
+        }
+
         const message = error.message;
-        const statusCode = error.response?.status ?? 400;
+        const statusCode = error.response?.status ?? 500;
         const data = error.response?.data as ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
@@ -289,8 +305,12 @@ export class MPesa {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status && error.response.status < 500) {
+          return error.response.data as QueryCustomerNameResponse;
+        }
+
         const message = error.message;
-        const statusCode = error.response?.status ?? 400;
+        const statusCode = error.response?.status ?? 500;
         const data = error.response?.data as ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
@@ -343,11 +363,16 @@ export class MPesa {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
+        if (error.response?.status && error.response.status < 500) {
+          return error.response.data as ReversalResponse;
+        }
+
         const message = error.message;
-        const statusCode = error.response?.status ?? 400;
+        const statusCode = error.response?.status ?? 500;
         const data = error.response?.data as ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
+
       throw new Error("API error");
     }
   }
