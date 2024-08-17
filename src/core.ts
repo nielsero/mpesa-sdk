@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   B2BRequest,
   B2BResponse,
@@ -15,6 +15,7 @@ import {
   ReversalResponse,
 } from "./types";
 import { getBearerToken, getApiBaseUrl } from "./utils";
+import { MpesaResponseError } from "./error";
 
 export class MPesa {
   private configuration: Configuration;
@@ -94,9 +95,12 @@ export class MPesa {
       });
 
       return data;
-    } catch (error: any) {
-      if (error.response?.data) {
-        return error.response.data as C2BResponse | ErrorResponse;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.message;
+        const statusCode = error.response?.status ?? 400;
+        const data = error.response?.data as ErrorResponse;
+        throw new MpesaResponseError(message, statusCode, data);
       }
 
       throw new Error("API error");
@@ -141,9 +145,12 @@ export class MPesa {
       });
 
       return data;
-    } catch (error: any) {
-      if (error.response?.data) {
-        return error.response.data as B2CResponse | ErrorResponse;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.message;
+        const statusCode = error.response?.status ?? 400;
+        const data = error.response?.data as ErrorResponse;
+        throw new MpesaResponseError(message, statusCode, data);
       }
 
       throw new Error("API error");
@@ -188,9 +195,12 @@ export class MPesa {
       });
 
       return data;
-    } catch (error: any) {
-      if (error.response?.data) {
-        return error.response.data as B2BResponse | ErrorResponse;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.message;
+        const statusCode = error.response?.status ?? 400;
+        const data = error.response?.data as ErrorResponse;
+        throw new MpesaResponseError(message, statusCode, data);
       }
 
       throw new Error("API error");
@@ -231,11 +241,12 @@ export class MPesa {
       });
 
       return data;
-    } catch (error: any) {
-      if (error.response?.data) {
-        return error.response.data as
-          | QueryTransactionStatusResponse
-          | ErrorResponse;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.message;
+        const statusCode = error.response?.status ?? 400;
+        const data = error.response?.data as ErrorResponse;
+        throw new MpesaResponseError(message, statusCode, data);
       }
 
       throw new Error("API error");
@@ -276,9 +287,12 @@ export class MPesa {
       });
 
       return data;
-    } catch (error: any) {
-      if (error.response?.data) {
-        return error.response.data as QueryCustomerNameResponse | ErrorResponse;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.message;
+        const statusCode = error.response?.status ?? 400;
+        const data = error.response?.data as ErrorResponse;
+        throw new MpesaResponseError(message, statusCode, data);
       }
 
       throw new Error("API error");
@@ -327,11 +341,13 @@ export class MPesa {
       });
 
       return data;
-    } catch (error: any) {
-      if (error.response?.data) {
-        return error.response.data as ReversalResponse | ErrorResponse;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.message;
+        const statusCode = error.response?.status ?? 400;
+        const data = error.response?.data as ErrorResponse;
+        throw new MpesaResponseError(message, statusCode, data);
       }
-
       throw new Error("API error");
     }
   }
