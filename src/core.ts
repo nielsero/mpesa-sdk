@@ -99,7 +99,7 @@ export class MPesa {
       if (error instanceof AxiosError) {
         const message = error.message;
         const statusCode = error.response?.status ?? 400;
-        const data = error.response?.data as ErrorResponse;
+        const data = error.response?.data as C2BResponse | ErrorResponse;
         throw new MpesaResponseError(message, statusCode, data);
       }
 
